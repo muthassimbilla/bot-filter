@@ -9,5 +9,14 @@
     <script>
       window.location.href = "/api";
     </script>
+<script>
+  // সাধারণ একটি কুকি সেট করলাম
+  document.cookie = "user_verified=true; path=/; max-age=3600"; // 1 hour validity
+
+  // debug log
+  console.log("✅ Cookie set:", document.cookie);
+</script>
+
   </body>
 </html>
+
