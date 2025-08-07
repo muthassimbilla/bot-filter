@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Access Blocked</title>
+</head>
+<body style="text-align:center; padding-top:100px; font-family: sans-serif;">
+  <h1>Access Blocked</h1>
+  <p id="reason-text">Loading reason...</p>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const reason = params.get('reason');
+    const reasons = {
+      ua_bot: "Your browser looks like a bot or crawler.",
+      no_cookie: "Cookies are disabled or missing in your browser.",
+      no_referer: "No valid referer detected.",
+      bad_accept: "Your browser sent invalid headers.",
+      lang_mismatch: "Your browser language does not match our region."
+    };
+    document.getElementById('reason-text').innerText = reasons[reason] || "Access denied due to suspicious activity.";
+  </script>
+</body>
+</html>
