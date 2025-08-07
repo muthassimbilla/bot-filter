@@ -1,31 +1,26 @@
 export default function handler(req, res) {
-  const ua = req.headers["user-agent"] || "";
-  const ip =
-    req.headers["x-forwarded-for"] || req.connection.remoteAddress || "";
-  const lang = req.headers["accept-language"] || "";
-  const referer = req.headers["referer"] || "";
-  const cookies = req.headers["cookie"] || "";
-  const accept = req.headers["accept"] || "";
+  const ua = req.headers['user-agent'] || '';
+  const cookies = req.headers['cookie'] || '';
+  const referer = req.headers['referer'] || '';
+  const accept = req.headers['accept'] || '';
+  const lang = req.headers['accept-language'] || '';
 
-  const suspiciousUA = [
-    "bot",
-    "crawl",
-    "spider",
-    "headless",
-    "scrapy",
-    "python",
-    "curl",
-  ];
-  const matchedUA = suspiciousUA.some((term) =>
-    ua.toLowerCase().includes(term.toLowerCase())
-  );
-  const noCookie = !cookies || cookies.length < 5;
-  const noReferer = !referer || referer.length < 5;
-  const badAccept = !accept.includes("text/html");
-  const langMismatch = !(lang.includes("en") || lang.includes("bn"));
+  const suspiciousUA = ["bot", "crawl", "spider", "headless", "scrapy", "python", "curl"];
 
-  if (matchedUA || noCookie || noReferer || badAccept || langMismatch) {
-    return res.redirect(302, "https://example.com/blocked");
+  if (suspiciousUA.some(term => ua.toLowerCase().includes(term.toLowerCase()))) {
+    return res.redirect(302, "https://example.com/blocked.html?reason=ua_bot");
+  }
+  if (!cookies || cookies.length < 5) {
+    return res.redirect(302, "https://example.com/blocked.html?reason=no_cookie");
+  }
+  if (!referer || referer.length < 5) {
+    return res.redirect(302, "https://example.com/blocked.html?reason=no_referer");
+  }
+  if (!accept.includes("text/html")) {
+    return res.redirect(302, "https://example.com/blocked.html?reason=bad_accept");
+  }
+  if (!(lang.includes("en") || lang.includes("bn"))) {
+    return res.redirect(302, "https://example.com/blocked.html?reason=lang_mismatch");
   }
 
   return res.redirect(302, "https://your-cpa-offer.com");
